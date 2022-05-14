@@ -67,10 +67,22 @@ public class JpaMain {
 //            em.detach(member);//JPA 영속성을 없앤다. 커밋시에 아무일도 일어 나지 않는다.
 //            em.clear(); //em안에있는 모든 것들을 영속성 제거한다.
 
-            Member member = new Member();
-            member.setUsername("C");
+            Team team = new Team();
+            team.setName("TeamA");
 
+            em.persist(team);
+
+            Member member = new Member();
+            member.setUsername("member1");
+            member.changeTeam(team);
             em.persist(member);
+
+//            team.getMembers().add(member);
+            Member m = em.find(Member.class, member.getId());
+            System.out.println("m = " + m.getTeam().getClass());
+
+            em.flush();
+            em.clear();
 
             tx.commit();
         } catch (Exception e) {
